@@ -1,5 +1,5 @@
-import requests
 import stripe
+
 from nio import GeneratorBlock
 from nio.signal.base import Signal
 from nio.properties import VersionProperty, StringProperty, IntProperty, \
@@ -20,17 +20,13 @@ class BuildSignal(RESTHandler):
 
     def on_post(self, req, rsp):
         payload = req.get_body()
-        received_sig = req.headers.get('Stripe-Signature', None)
+
+        # TODO: Need to check webhook secret?
+        # received_sig = req.get_header('Stripe-Signature', None)
+
         if not isinstance(payload, dict):
             self.logger.error("Invalid JSON in body: {}".format(payload))
             return
-        try:
-            event = stripe.Webhook.construct_event(
-                payload, received_sig, self.webhook_token())
-        except ValueError:
-            self.logger.error('Error decoding payload')
-        except stripe.error.SignatureVerificationError:
-            self.logger.error('Invalid signature')
 
         self.notify_signals([Signal(payload)])
 
@@ -47,12 +43,8 @@ class Stripe(GeneratorBlock):
     version = VersionProperty('0.1.0')
     web_server = ObjectProperty(
         WebServer, title='Web Server', default=WebServer())
-    # callback_url = StringProperty(
-    #     title="Callback URL", default="https://example.org/hooks/1")
     access_token = StringProperty(
         title="Access Token", default="[[STRIPE_ACCESS_TOKEN]]")
-    webhook_token = StringProperty(
-        title="Stripe Webhook Token", default="[[STRIPE_WEBHOOK_TOKEN]]")
 
     def __init__(self):
         super().__init__()
@@ -64,24 +56,11 @@ class Stripe(GeneratorBlock):
         self._create_web_server()
         stripe.api_key = self.access_token()
 
-        # TODO: What should post body to Stripe look like?
-            # Does it need it?
-        # response = self._request('post', body={
-        #     "service_type": "web",
-        #     "topics": ["conversation.user.created"],
-        #     "url": self.callback_url(),
-        # })
-        # if response.status_code != 200:
-        #     raise Exception
-        # self._subscription_id = response.json()["id"]
-
     def start(self):
         super().start()
         self._server.start()
 
     def stop(self):
-        # TODO: What should 'delete' request to Stripe look like?
-        # self._request('delete', id=self._subscription_id)
         self._server.stop()
         super().stop()
 
@@ -95,25 +74,3 @@ class Stripe(GeneratorBlock):
                 self.logger,
             )
         )
-
-    # def _request(self, method='post', id=None, body=None):
-    #     TODO: What is the Stripe url?
-            # Hopefully taken care of by the stripe library?
-
-        # url = 'https://api.intercom.io/subscriptions'
-        # if id:
-        #     url += "/{}".format(id)
-        # kwargs = {}
-        # kwargs['headers'] = {
-        #     "Authorization": "Bearer {}".format(self.access_token()),
-        #     "Accept": "application/json",
-        #     "Content-Type": "application/json",
-        # }
-        # if body:
-        #     kwargs['json'] = body
-        # response = getattr(requests, method)(url, **kwargs)
-        # if response.status_code != 200:
-        #     self.logger.error("Http request failed: {} {}".format(
-        #         response, response.json()))
-        # self.logger.debug("Http response: {}".format(response.json()))
-        # return response
