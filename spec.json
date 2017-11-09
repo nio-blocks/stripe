@@ -1,40 +1,31 @@
 {
-  "namespace/BlockName": {
-    "version": "1.0.0",
-    "description": "Description of the block.",
+  "nio/Stripe": {
+    "version": "0.1.0",
+    "description": "Block to establish webserver and forwards data from a webhook configured in stripe",
     "properties": {
-      "<property1>": {
-        "description": "Required description of the property"
+      "access_token": {
+        "title": "Access Token",
+        "type": "StringType",
+        "description": "Access key from Stripe dashboard",
+        "default": "[[STRIPE_ACCESS_TOKEN]]"
       },
-      "<property2>": {
-        "default": "Optional metadata with any key.",
-        "description": "Required description of the property"
+      "web_server": {
+        "title": "Web Server",
+        "type": "ObjectType",
+        "description": "Web server configuration for webhook to post to",
+        "default": {
+          "port": 8182,
+          "endpoint": "",
+          "host": "0.0.0.0"
+        }
       }
     },
-    "inputs": {
-      "<input1 | default>": {
-        "description": "Required description of the input"
-      },
-      "<input2>": {
-        "description": "Required description of the input"
-      }
-    },
+    "inputs": {},
     "outputs": {
-      "<output1 | default>": {
-        "description": "Required description of the output"
-      },
-      "<output2>": {
-        "description": "Required description of the output"
+      "default": {
+        "description": "Data sent from stripe."
       }
     },
-    "commands": {
-      "<command1>": {
-        "description": "Required description of the command",
-        "type": "Optional type and other metadata with any key."
-      },
-      "<command2>": {
-        "description": "Required description of the command"
-      }
-    }
+    "commands": {}
   }
 }
