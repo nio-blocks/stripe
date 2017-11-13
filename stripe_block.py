@@ -1,4 +1,5 @@
 import stripe
+import json
 
 from nio import GeneratorBlock
 from nio.signal.base import Signal
@@ -19,10 +20,23 @@ class BuildSignal(RESTHandler):
         return
 
     def on_post(self, req, rsp):
-        payload = req.get_body()
+        body = req._body.read(req._get_length()).decode('utf-8')
+        received_sig = req.get_header('Stripe-Signature', None)
 
-        # TODO: Need to check webhook secret?
-        # received_sig = req.get_header('Stripe-Signature', None)
+        try:
+            event = stripe.Webhook.construct_event(
+                body, received_sig, 'whsec_d50xsZYLdlvB4JlZxrvVarcbZXx3Aftt')
+        except ValueError:
+            print("Error while decoding event!")
+            return 'Bad payload', 400
+        except stripe.error.SignatureVerificationError:
+            print("Invalid signature!")
+            return 'Bad signature', 400
+
+        self.logger.debug("Received event: id={id}, type={type}".format(
+            id=event.id, type=event.type))
+
+        payload = json.loads(body)
 
         if not isinstance(payload, dict):
             self.logger.error("Invalid JSON in body: {}".format(payload))
