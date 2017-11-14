@@ -10,10 +10,11 @@ from nio.modules.web import RESTHandler, WebEngine
 
 class BuildSignal(RESTHandler):
 
-    def __init__(self, endpoint, notify_signals, logger):
+    def __init__(self, endpoint, notify_signals, logger, webhook_secret):
         super().__init__('/'+endpoint)
         self.notify_signals = notify_signals
         self.logger = logger
+        self.webhook_secret = webhook_secret
 
     def before_handler(self, req, rsp):
         # Overridden in order to skip the authentication in the framework
@@ -25,7 +26,7 @@ class BuildSignal(RESTHandler):
 
         try:
             event = stripe.Webhook.construct_event(
-                body, received_sig, 'whsec_d50xsZYLdlvB4JlZxrvVarcbZXx3Aftt')
+                body, received_sig, self.webhook_secret)
         except ValueError:
             print("Error while decoding event!")
             return 'Bad payload', 400
@@ -57,8 +58,8 @@ class Stripe(GeneratorBlock):
     version = VersionProperty('0.1.0')
     web_server = ObjectProperty(
         WebServer, title='Web Server', default=WebServer())
-    access_token = StringProperty(
-        title="Access Token", default="[[STRIPE_ACCESS_TOKEN]]")
+    webhook_secret = StringProperty(
+        title="Stripe webhook secret key", default="[[STRIPE_WEBHOOK_SECRET]]")
 
     def __init__(self):
         super().__init__()
@@ -68,7 +69,6 @@ class Stripe(GeneratorBlock):
     def configure(self, context):
         super().configure(context)
         self._create_web_server()
-        stripe.api_key = self.access_token()
 
     def start(self):
         super().start()
@@ -86,5 +86,6 @@ class Stripe(GeneratorBlock):
                 self.web_server().endpoint(),
                 self.notify_signals,
                 self.logger,
+                self.webhook_secret()
             )
         )

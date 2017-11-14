@@ -13,7 +13,8 @@ class TestBuildSignal(NIOBlockTestCase):
         notify_signals = MagicMock()
         handler = BuildSignal(endpoint='',
                               notify_signals=notify_signals,
-                              logger=MagicMock())
+                              logger=MagicMock(),
+                              webhook_secret='superSecret')
         request = MagicMock()
         request._body.read.return_value.decode.return_value = '{"Im a": "dictionary"}'
 
@@ -41,6 +42,7 @@ class TestStripeBlock(NIOBlockTestCase):
                     blk.web_server().endpoint(),
                     blk.notify_signals,
                     blk.logger,
+                    blk.webhook_secret()
                 )
             # self.assertEqual(len(responses.calls), 0)
 
