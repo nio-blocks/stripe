@@ -17,7 +17,7 @@
       "webhook_secret": {
         "title": "Stripe webhook secret key",
         "type": "StringType",
-        "description": "",
+        "description": "Webhook secrect from Stripe",
         "default": "[[STRIPE_WEBHOOK_SECRET]]"
       }
     },
