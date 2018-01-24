@@ -55,7 +55,7 @@ class WebServer(PropertyHolder):
 
 class Stripe(GeneratorBlock):
 
-    version = VersionProperty('0.1.0')
+    version = VersionProperty("0.1.1")
     web_server = ObjectProperty(
         WebServer, title='Web Server', default=WebServer())
     webhook_secret = StringProperty(
