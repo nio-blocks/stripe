@@ -1,1 +1,1 @@
-stripe
+stripe~=1.0
