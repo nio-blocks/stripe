@@ -23,7 +23,6 @@ class BuildSignal(RESTHandler):
     def on_post(self, req, rsp):
         body = req._body.read(req._get_length()).decode('utf-8')
         received_sig = req.get_header('Stripe-Signature', None)
-        self.logger.warning("##########Recieve Post##############")
         try:
             event = stripe.Webhook.construct_event(
                 body, received_sig, self.webhook_secret)
