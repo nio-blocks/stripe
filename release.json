@@ -1,7 +1,7 @@
 {
   "nio/Stripe": {
     "language": "Python",
-    "url": "git://github.com/cowleyk/stripe.git",
+    "url": "git://github.com/nio-blocks/stripe.git",
     "version": "0.1.0"
   }
 }
