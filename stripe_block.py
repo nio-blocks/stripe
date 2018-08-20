@@ -11,10 +11,10 @@ from nio.modules.web import RESTHandler, WebEngine
 class BuildSignal(RESTHandler):
 
     def __init__(self, endpoint, notify_signals, logger, webhook_secret):
-       super().__init__('/'+endpoint) 
-       self.notify_signals = notify_signals
-       self.logger = logger
-       self.webhook_secret = webhook_secret
+        super().__init__('/'+endpoint)
+        self.notify_signals = notify_signals
+        self.logger = logger
+        self.webhook_secret = webhook_secret
 
     def before_handler(self, req, rsp):
         # Overridden in order to skip the authentication in the framework

@@ -41,4 +41,3 @@ class TestStripeBlock(NIOBlockTestCase):
                     blk.logger,
                     blk.webhook_secret()
                 )
-
