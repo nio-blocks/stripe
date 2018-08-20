@@ -1,8 +1,10 @@
 {
   "nio/Stripe": {
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Block to establish webserver and forwards data from a webhook configured in stripe",
-    "categories": [],
+    "categories": [
+      "Web Data"
+    ],
     "properties": {
       "web_server": {
         "title": "Web Server",
@@ -17,7 +19,7 @@
       "webhook_secret": {
         "title": "Stripe webhook secret key",
         "type": "StringType",
-        "description": "",
+        "description": "Webhook secrect from Stripe",
         "default": "[[STRIPE_WEBHOOK_SECRET]]"
       }
     },
