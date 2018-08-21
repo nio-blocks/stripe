@@ -1,6 +1,6 @@
 {
   "nio/Stripe": {
-    "version": "0.1.1",
+    "version": "0.2.0",
     "description": "Block to establish webserver and forwards data from a webhook configured in stripe",
     "categories": [
       "Web Data"
