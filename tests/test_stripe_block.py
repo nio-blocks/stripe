@@ -1,8 +1,6 @@
 import json
 from unittest.mock import MagicMock, patch
 
-import responses
-
 from nio.testing.block_test_case import NIOBlockTestCase
 from ..stripe_block import Stripe, BuildSignal
 
@@ -27,7 +25,6 @@ class TestBuildSignal(NIOBlockTestCase):
 
 class TestStripeBlock(NIOBlockTestCase):
 
-    # @responses.activate
     def test_web_server_created(self):
         blk = Stripe()
 
@@ -44,5 +41,3 @@ class TestStripeBlock(NIOBlockTestCase):
                     blk.logger,
                     blk.webhook_secret()
                 )
-            # self.assertEqual(len(responses.calls), 0)
-

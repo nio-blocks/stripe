@@ -11,8 +11,8 @@
         "type": "ObjectType",
         "description": "Web server configuration for webhook to post to",
         "default": {
-          "port": 8182,
           "host": "0.0.0.0",
+          "port": 8182,
           "endpoint": ""
         }
       },

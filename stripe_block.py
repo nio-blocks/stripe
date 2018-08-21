@@ -23,7 +23,6 @@ class BuildSignal(RESTHandler):
     def on_post(self, req, rsp):
         body = req._body.read(req._get_length()).decode('utf-8')
         received_sig = req.get_header('Stripe-Signature', None)
-
         try:
             event = stripe.Webhook.construct_event(
                 body, received_sig, self.webhook_secret)
@@ -50,7 +49,7 @@ class WebServer(PropertyHolder):
 
     host = StringProperty(title='Host', default='0.0.0.0')
     port = IntProperty(title='Port', default=8182)
-    endpoint = StringProperty(title='Endpoint', default='')
+    endpoint = StringProperty(title='Endpoint', default="", allow_none=True)
 
 
 class Stripe(GeneratorBlock):
