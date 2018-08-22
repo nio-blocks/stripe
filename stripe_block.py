@@ -49,7 +49,7 @@ class WebServer(PropertyHolder):
 
     host = StringProperty(title='Host', default='0.0.0.0')
     port = IntProperty(title='Port', default=8182)
-    endpoint = StringProperty(title='Endpoint', default="", allow_none=True)
+    endpoint = StringProperty(title='Endpoint', default="")
 
 
 class Stripe(GeneratorBlock):
